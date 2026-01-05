@@ -1,0 +1,97 @@
+/* ===== GLOBAL ===== */
+* {
+    font-family: Inter, "Segoe UI", "Noto Sans", sans-serif;
+    font-size: 13px;
+}
+
+/* ===== WINDOW ===== */
+QMainWindow {
+    background-color: #1c1b22;
+}
+
+/* ===== TOOLBAR ===== */
+QWidget#BrowserToolbar {
+    background-color: #2b2a33;
+    border-bottom: 1px solid #3a3944;
+}
+
+/* ===== BUTTONS ===== */
+QToolButton {
+    background: transparent;
+    border: none;
+    color: #e0e0e6;
+    padding: 6px;
+    border-radius: 6px;
+}
+
+QToolButton:hover {
+    background-color: #3a3944;
+}
+
+QToolButton:pressed {
+    background-color: #4a4954;
+}
+
+/* ===== ADDRESS BAR ===== */
+QLineEdit {
+    background-color: #1c1b22;
+    border: 1px solid #3a3944;
+    border-radius: 8px;
+    padding: 6px 10px;
+    color: #ffffff;
+}
+
+QLineEdit:focus {
+    border: 1px solid #7c7cff;
+}
+
+/* ===== TABS ===== */
+QTabWidget::pane {
+    border: none;
+    background-color: #1c1b22;
+}
+
+QTabBar::tab {
+    background-color: #2b2a33;
+    color: #e0e0e6;
+    padding: 6px 12px;
+    margin: 4px 2px;
+    border-radius: 8px;
+}
+
+QTabBar::tab:selected {
+    background-color: #42414d;
+}
+
+QTabBar::tab:hover {
+    background-color: #3a3944;
+}
+
+/* ===== CLOSE BUTTON (hover only) ===== */
+QTabBar::close-button {
+    image: none;
+}
+
+QToolButton {
+    font-size: 14px;
+}
+
+QToolButton:hover {
+    background-color: #3a3944;
+}
+
+QToolButton[text="✕"]:hover {
+    background-color: #c42b1c;
+}
+
+QToolButton {
+    font-size: 14px;
+}
+
+QToolButton:hover {
+    background-color: #3a3944;
+}
+
+QToolButton[text="✕"]:hover {
+    background-color: #c42b1c;
+}

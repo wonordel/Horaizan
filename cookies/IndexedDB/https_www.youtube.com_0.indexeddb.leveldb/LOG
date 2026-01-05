@@ -1,5 +1,0 @@
-2025/02/25-23:00:57.785 2230 Reusing MANIFEST cookies\IndexedDB\https_www.youtube.com_0.indexeddb.leveldb/MANIFEST-000001
-2025/02/25-23:03:29.397 1a9c Level-0 table #5: started
-2025/02/25-23:03:29.409 1a9c Level-0 table #5: 837 bytes OK
-2025/02/25-23:03:29.411 1a9c Delete type=0 #3
-2025/02/25-23:03:29.411 1a9c Manual compaction at level-0 from (begin) .. (end); will stop at (end)

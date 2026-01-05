@@ -1,6 +1,0 @@
-cars = ["BMW", "Toyota", "Lada", "RPG", "Car", "Tank", "Dora"]
-
-x = int(input("Enter u car:   "))
-x = x - 1
-
-print(cars[x])
