@@ -7,6 +7,7 @@ Horaizan — это минималистичный open source веб-брауз
 - **Минималистичный интерфейс**: Простой и интуитивно понятный интерфейс, который не отвлекает от основного контента.
 - **Управление вкладками**: Возможность открывать, закрывать.
 - **Настройка поисковой системы**: Выбор из популярных поисковых систем, таких как Google, Yandex, DuckDuckGo, Bing.
+- **Конфиденциальность**: Наш браузер *никогда* не будет прослушиваться кем либо, (за сайты не говорим), мы обещаем.
 
 ## Установка
 
@@ -49,32 +50,32 @@ python -m app.main
 
 ```
 ├── app
-│   ├── __init__.py
-│   ├── main.py
-│   ├── profile.py
-│   ├── __pycache__
-│   │   ├── __init__.cpython-314.pyc
-│   │   ├── main.cpython-314.pyc
-│   │   ├── profile.cpython-314.pyc
-│   │   ├── settings.cpython-314.pyc
-│   │   ├── webview.cpython-314.pyc
-│   │   └── window.cpython-314.pyc
-│   ├── settings.py
-│   ├── themes
-│   │   └── dark.qss
-│   ├── ui
-│   │   ├── __init__.py
-│   │   ├── menu.py
-│   │   ├── __pycache__
-│   │   │   ├── __init__.cpython-314.pyc
-│   │   │   ├── menu.cpython-314.pyc
-│   │   │   ├── settings_page.cpython-314.pyc
-│   │   │   └── toolbar.cpython-314.pyc
-│   │   ├── settings_dialog.py
-│   │   ├── settings_page.py
-│   │   └── toolbar.py
-│   ├── webview.py
-│   └── window.py
+│   ├── __init__.py
+│   ├── main.py
+│   ├── profile.py
+│   ├── __pycache__
+│   │   ├── __init__.cpython-314.pyc
+│   │   ├── main.cpython-314.pyc
+│   │   ├── profile.cpython-314.pyc
+│   │   ├── settings.cpython-314.pyc
+│   │   ├── webview.cpython-314.pyc
+│   │   └── window.cpython-314.pyc
+│   ├── settings.py
+│   ├── themes
+│   │   └── dark.qss
+│   ├── ui
+│   │   ├── __init__.py
+│   │   ├── menu.py
+│   │   ├── __pycache__
+│   │   │   ├── __init__.cpython-314.pyc
+│   │   │   ├── menu.cpython-314.pyc
+│   │   │   ├── settings_page.cpython-314.pyc
+│   │   │   └── toolbar.cpython-314.pyc
+│   │   ├── settings_dialog.py
+│   │   ├── settings_page.py
+│   │   └── toolbar.py
+│   ├── webview.py
+│   └── window.py
 ├── README.md
 ├── requirements.txt
 └── tree.txt

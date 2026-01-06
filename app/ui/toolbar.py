@@ -1,14 +1,12 @@
 import re
-
 from PySide6.QtWidgets import (
     QWidget,
+    QToolButton,
     QHBoxLayout,
     QLineEdit,
-    QToolButton,
     QApplication
 )
-from PySide6.QtCore import QUrl, Qt
-
+from PySide6.QtCore import QUrl
 from app.settings import Settings
 from app.ui.menu import BrowserMenu
 
@@ -93,7 +91,36 @@ class BrowserToolbar(QWidget):
         self.webview.setUrl(QUrl(f"{search_url}{text}"))
 
     def update_url(self, url: QUrl):
-        self.address_bar.setText(url.toString())
+        if url.scheme() == "horaizan":
+            self.address_bar.setText("Настройки")
+        else:
+            self.address_bar.setText(url.toString())
 
     def open_settings(self):
-        self.window().open_settings()
+        print("OPEN SETTINGS CALLED")
+
+        # напрямую говорим webview загрузить URL
+        # и НЕ ТРОГАЕМ address_bar
+        self.webview.page().acceptNavigationRequest(
+            QUrl("horaizan://settings"),
+            None,
+            True
+        )
+
+
+
+
+
+    def navigate(self):
+        text = self.address_bar.text().strip()
+
+        # 🔴 ВАЖНО: не трогать horaizan://
+        if text.startswith("horaizan://"):
+            self.webview.setUrl(QUrl(text))
+            return
+
+        if "://" not in text:
+            text = "https://" + text
+
+        self.webview.setUrl(QUrl(text))
+

@@ -1,0 +1,65 @@
+/* ===== GLOBAL ===== */
+* {
+    font-family: Inter, "Segoe UI", "Noto Sans", sans-serif;
+    font-size: 13px;
+}
+
+/* ===== WINDOW ===== */
+QMainWindow {
+    background-color: #ffffff;
+}
+
+/* ===== TOOLBAR ===== */
+QWidget#BrowserToolbar {
+    background-color: #f5f5f7;
+    border-bottom: 1px solid #d0d0d7;
+}
+
+/* ===== BUTTONS ===== */
+QToolButton {
+    background: transparent;
+    border: none;
+    color: #000000;
+    padding: 6px;
+    border-radius: 6px;
+}
+
+QToolButton:hover {
+    background-color: #e0e0e6;
+}
+
+QToolButton[text="✕"]:hover {
+    background-color: #e81123;
+}
+
+/* ===== ADDRESS BAR ===== */
+QLineEdit {
+    background-color: #ffffff;
+    border: 1px solid #c0c0c7;
+    border-radius: 8px;
+    padding: 6px 10px;
+    color: #000000;
+}
+
+QLineEdit:focus {
+    border: 1px solid #0060df;
+}
+
+/* ===== TABS ===== */
+QTabWidget::pane {
+    border: none;
+    background-color: #ffffff;
+}
+
+QTabBar::tab {
+    background-color: #f0f0f4;
+    color: #000000;
+    padding: 6px 12px;
+    margin: 4px 2px;
+    border-radius: 8px;
+}
+
+QTabBar::tab:selected {
+    background-color: #ffffff;
+    border: 1px solid #c0c0c7;
+}

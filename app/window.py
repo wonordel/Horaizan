@@ -7,7 +7,7 @@ from PySide6.QtWidgets import (
     QToolButton
 )
 from PySide6.QtCore import Qt
-
+from PySide6.QtCore import Qt, QUrl
 from app.webview import WebView
 from app.ui.toolbar import BrowserToolbar
 from app.profile import create_profile
@@ -50,16 +50,19 @@ class BrowserWindow(QMainWindow):
         button = QToolButton()
         button.setText("+")
         button.setAutoRaise(True)
-        button.clicked.connect(self.add_tab)
+        button.clicked.connect(lambda: self.add_tab())
         return button
 
-    def add_tab(self):
+    def add_tab(self, url: str | None = None):
+        if not isinstance(url, str):
+            url = "https://www.google.com"
+
         container = QWidget()
         layout = QVBoxLayout(container)
         layout.setContentsMargins(0, 0, 0, 0)
         layout.setSpacing(0)
 
-        webview = WebView(self.profile)
+        webview = WebView(self.profile, self)
         toolbar = BrowserToolbar(webview)
 
         layout.addWidget(toolbar)
@@ -68,23 +71,29 @@ class BrowserWindow(QMainWindow):
         index = self.tabs.addTab(container, "New Tab")
         self.tabs.setCurrentIndex(index)
 
-        webview.titleChanged.connect(
-            lambda title: self.tabs.setTabText(index, title[:30])
-        )
+        def on_title_changed(title: str):
+            if isinstance(url, str) and url.startswith("horaizan://"):
+                self.tabs.setTabText(index, "Настройки")
+            else:
+                self.tabs.setTabText(index, title if title else "New Tab")
+
+        webview.titleChanged.connect(on_title_changed)
+
+        if url == "horaizan://settings":
+            container.is_settings_tab = True
+            self.tabs.setTabText(index, "Настройки")
+
+        webview.setUrl(QUrl(url))
+
 
     def close_tab(self, index):
         if self.tabs.count() > 1:
             self.tabs.removeTab(index)
 
     def open_settings(self):
-        for i in range(self.tabs.count()):
-            if self.tabs.tabText(i) == "Настройки":
-                self.tabs.setCurrentIndex(i)
-                return
+        print("OPEN SETTINGS CALLED")
+        self.webview.setUrl(QUrl("horaizan://settings"))
 
-        page = SettingsPage(self.settings, self)
-        self.tabs.addTab(page, "Настройки")
-        self.tabs.setCurrentIndex(self.tabs.count() - 1)
 
  
     def create_window_controls(self):
@@ -138,3 +147,8 @@ class BrowserWindow(QMainWindow):
                 self.setStyleSheet(f.read())
         except FileNotFoundError:
             pass
+
+    def set_theme(self, theme):
+        path = f"app/ui/styles/{theme}.qss"
+        with open(path, "r") as f:
+            self.setStyleSheet(f.read())
