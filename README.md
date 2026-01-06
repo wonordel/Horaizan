@@ -49,36 +49,45 @@ python -m app.main
 ## Структура проекта
 
 ```
+.
 ├── app
-│   ├── __init__.py
-│   ├── main.py
-│   ├── profile.py
-│   ├── __pycache__
-│   │   ├── __init__.cpython-314.pyc
-│   │   ├── main.cpython-314.pyc
-│   │   ├── profile.cpython-314.pyc
-│   │   ├── settings.cpython-314.pyc
-│   │   ├── webview.cpython-314.pyc
-│   │   └── window.cpython-314.pyc
-│   ├── settings.py
-│   ├── themes
-│   │   └── dark.qss
-│   ├── ui
-│   │   ├── __init__.py
-│   │   ├── menu.py
-│   │   ├── __pycache__
-│   │   │   ├── __init__.cpython-314.pyc
-│   │   │   ├── menu.cpython-314.pyc
-│   │   │   ├── settings_page.cpython-314.pyc
-│   │   │   └── toolbar.cpython-314.pyc
-│   │   ├── settings_dialog.py
-│   │   ├── settings_page.py
-│   │   └── toolbar.py
-│   ├── webview.py
-│   └── window.py
+│   ├── bridge.py
+│   ├── __init__.py
+│   ├── main.py
+│   ├── profile.py
+│   ├── __pycache__
+│   │   ├── __init__.cpython-313.pyc
+│   │   ├── main.cpython-313.pyc
+│   │   ├── profile.cpython-313.pyc
+│   │   ├── settings.cpython-313.pyc
+│   │   ├── webview.cpython-313.pyc
+│   │   └── window.cpython-313.pyc
+│   ├── settings_bridge.py
+│   ├── settings.py
+│   ├── themes
+│   │   ├── dark.qss
+│   │   └── light.qss
+│   ├── ui
+│   │   ├── __init__.py
+│   │   ├── menu.py
+│   │   ├── __pycache__
+│   │   │   ├── __init__.cpython-313.pyc
+│   │   │   ├── menu.cpython-313.pyc
+│   │   │   ├── settings_page.cpython-313.pyc
+│   │   │   └── toolbar.cpython-313.pyc
+│   │   ├── settings_dialog.py
+│   │   ├── settings_html.py
+│   │   ├── settings_page.py
+│   │   └── toolbar.py
+│   ├── web
+│   │   ├── settings.css
+│   │   ├── settings.html
+│   │   └── settings.js
+│   ├── webpage.py
+│   ├── webview.py
+│   └── window.py
 ├── README.md
-├── requirements.txt
-└── tree.txt
+└── requirements.txt
 ```
 
 - **requirements.txt**: Список зависимостей для установки.
