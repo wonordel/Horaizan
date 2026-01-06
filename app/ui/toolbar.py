@@ -55,12 +55,11 @@ class BrowserToolbar(QWidget):
         self.close_btn.clicked.connect(QApplication.quit)
         self.menu_button = QToolButton()
         self.menu_button.setText("☰")
-        self.menu_button.setPopupMode(QToolButton.InstantPopup)
-
-        self.menu = BrowserMenu(self)
-        self.menu_button.setMenu(self.menu)
+        self.menu_button.setToolTip("Настройки")
+        self.menu_button.clicked.connect(self.open_settings)
 
         layout.addWidget(self.menu_button)
+
 
 
         layout.addWidget(self.back_btn)
@@ -95,3 +94,6 @@ class BrowserToolbar(QWidget):
 
     def update_url(self, url: QUrl):
         self.address_bar.setText(url.toString())
+
+    def open_settings(self):
+        self.window().open_settings()

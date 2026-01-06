@@ -95,3 +95,21 @@ QToolButton:hover {
 QToolButton[text="✕"]:hover {
     background-color: #c42b1c;
 }
+
+#SettingsPage {
+    background-color: #1c1b22;
+    color: #ffffff;
+}
+
+#SettingsPage QLabel {
+    color: #ffffff;
+}
+
+#SettingsPage QComboBox,
+#SettingsPage QPushButton,
+#SettingsPage QCheckBox {
+    background-color: #2b2a33;
+    color: #ffffff;
+    border-radius: 6px;
+    padding: 6px;
+}

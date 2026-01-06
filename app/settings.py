@@ -29,3 +29,29 @@ class Settings:
         path = Path(__file__).parent / "themes" / theme
         with open(path) as f:
             self.setStyleSheet(f.read())
+    def search_engine_name(self):
+        url = self.search_engine()
+
+        engines = {
+            "Google": "https://www.google.com/search?q=",
+            "Yandex": "https://yandex.ru/search/?text=",
+            "Bing": "https://www.bing.com/search?q=",
+            "DuckDuckGo": "https://duckduckgo.com/?q="
+        }
+
+        for name, engine_url in engines.items():
+            if engine_url == url:
+                return name
+
+        return "Google"
+
+    def set_search_engine_name(self, name: str):
+        engines = {
+            "Google": "https://www.google.com/search?q=",
+            "Yandex": "https://yandex.ru/search/?text=",
+            "Bing": "https://www.bing.com/search?q=",
+            "DuckDuckGo": "https://duckduckgo.com/?q="
+        }
+
+        if name in engines:
+            self.set_search_engine(engines[name])

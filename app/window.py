@@ -43,12 +43,9 @@ class BrowserWindow(QMainWindow):
 
         self.setCentralWidget(self.tabs)
 
-        menu = self.menuBar().addMenu("Меню")
-        settings_action = menu.addAction("Настройки")
-        settings_action.triggered.connect(self.open_settings)
-
         self.add_tab()
-
+        self.apply_theme()
+        
     def create_add_tab_button(self):
         button = QToolButton()
         button.setText("+")
@@ -80,8 +77,15 @@ class BrowserWindow(QMainWindow):
             self.tabs.removeTab(index)
 
     def open_settings(self):
-        dialog = SettingsDialog(self.settings, self)
-        dialog.exec()
+        for i in range(self.tabs.count()):
+            if self.tabs.tabText(i) == "Настройки":
+                self.tabs.setCurrentIndex(i)
+                return
+
+        page = SettingsPage(self.settings, self)
+        self.tabs.addTab(page, "Настройки")
+        self.tabs.setCurrentIndex(self.tabs.count() - 1)
+
  
     def create_window_controls(self):
         widget = QWidget()
@@ -111,6 +115,26 @@ class BrowserWindow(QMainWindow):
 
         return widget
 
-def clear_browser_data(self):
-    self.profile.clearHttpCache()
-    self.profile.cookieStore().deleteAllCookies()
+    def clear_browser_data(self):
+        self.profile.clearHttpCache()
+        self.profile.cookieStore().deleteAllCookies()
+
+    def toggle_theme(self, state):
+        """
+        state приходит от QCheckBox:
+        0 = выкл, 2 = вкл
+        """
+        self.settings.set_dark(bool(state))
+        self.apply_theme()
+
+    def apply_theme(self):
+        from pathlib import Path
+
+        theme_file = "dark.qss" if self.settings.is_dark() else "light.qss"
+        theme_path = Path(__file__).parent / "themes" / theme_file
+
+        try:
+            with open(theme_path, "r") as f:
+                self.setStyleSheet(f.read())
+        except FileNotFoundError:
+            pass

@@ -1,0 +1,17 @@
+#SettingsPage {
+    background-color: #ffffff;
+    color: #000000;
+}
+
+#SettingsPage QLabel {
+    color: #000000;
+}
+
+#SettingsPage QComboBox,
+#SettingsPage QPushButton,
+#SettingsPage QCheckBox {
+    background-color: #f0f0f0;
+    color: #000000;
+    border-radius: 6px;
+    padding: 6px;
+}
