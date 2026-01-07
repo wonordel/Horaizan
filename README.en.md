@@ -12,7 +12,7 @@ Horaizan - is a minimalistic open source web browser developed using PySide6. Th
 - **Tab management**: The ability to open and close tabs.
 - **Search engine customization**: Choose from popular search engines like Google, Yandex, DuckDuckGo, and Bing.
 - **Privacy**: Our browser will *never* be monitored by anyone (we don't talk about websites), we promise.
-- **Change the theme to one that suits you:** The browser allows you to change the theme in the settings to black or white!
+- **Settings**: In the "Menu" menu, you can change the search engine, appearance settings, and clear the cache and cookies.
 
 ## Installation
 
