@@ -4,19 +4,19 @@
 [Русский](README.md)
 [English](README.en.md)
 
-Horaizan - is a minimalistic open source web browser developed using PySide6. The browser provides basic features for navigating web pages, managing tabs, customizing the appearance, and selecting a search engine.
-
+Horaizan - is a minimalistic open source web browser developed using PySide6. The browser provides basic features for navigating web pages, managing tabs, customizing the appearance, and selecting a search engine 🌐.
+ 
 ## Features
 
 - **Minimalistic interface**: A simple and intuitive interface that doesn't distract from the main content.
 - **Tab management**: The ability to open and close tabs.
-- **Search engine customization**: Choose from popular search engines like Google, Yandex, DuckDuckGo, and Bing.
-- **Privacy**: Our browser will *never* be monitored by anyone (we don't talk about websites), we promise.
-- **Settings**: In the "Menu" menu, you can change the search engine, appearance settings, and clear the cache and cookies.
+- **Search engine customization**: Choose from popular search engines such as Google, Yandex, DuckDuckGo, and Bing.
+- **Privacy**: Our browser will *never* be monitored by anyone (we don't talk about websites), we promise 🤫.
+- **Change the theme to your liking**: The browser allows you to change the theme in the settings, from black to white!
 
 ## Installation
 
-1. Make sure you have Python 3.9 or later installed.
+1. Make sure you have Python 3.9 or later installed 🐍.
 2. Clone the repository:
 
    ```bash
@@ -32,14 +32,14 @@ Horaizan - is a minimalistic open source web browser developed using PySide6. Th
 
 ## Launching
 
-To launch the browser, run the following command (Linux):
+To launch the browser, run the following command (Linux 🐧):
 
 ```bash
 python3 -m app.main
 ```
 (if it throws an error, restart it several times)
 
-To launch the browser on Windows:
+To launch the browser on Windows 🪟:
 
 ```batch
 python -m app.main
@@ -107,8 +107,8 @@ python -m app.main
 
 ## Acknowledgements
 
-Thanks to the PySide6 community and everyone who has contributed to the development of this project.
+Thanks to the PySide6 community and everyone who has contributed to the development of this project ❤️.
 
 ---
 
-**Note**: This project is in an inactive development stage and various bugs may appear(they will be here, I made it myself). If you find errors or have suggestions for improvement, please do not create an issue or submit a pull request.
+**Note**: This project is in an inactive development stage and various bugs may appear(they will be here, I made it myself). If you find errors or have suggestions for improvement, please do not create an issue or submit a pull request ❤️.
