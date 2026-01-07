@@ -151,35 +151,22 @@ select {
 <script>
 let settings = null;
 
-/* ===== INIT WEBCHANNEL (CORRECT WAY) ===== */
-function initWebChannel() {
-    new QWebChannel(qt.webChannelTransport, function(channel) {
-        settings = channel.objects.settings;
-        console.log("QWebChannel ready:", settings);
+new QWebChannel(qt.webChannelTransport, function(channel) {
+    settings = channel.objects.bridge;
+    console.log("Bridge ready", settings);
+
+    // применяем текущую тему при открытии
+    settings.getTheme(function(theme) {
+        console.log("Current theme:", theme);
     });
-}
+});
 
-if (typeof qt !== "undefined") {
-    initWebChannel();
-} else {
-    document.addEventListener("qtwebchannelready", initWebChannel);
-}
-
-/* ===== SAFE WRAPPERS ===== */
 function setDarkTheme() {
-    if (settings) settings.setDarkTheme();
+    if (settings) settings.setTheme("dark");
 }
 
 function setLightTheme() {
-    if (settings) settings.setLightTheme();
-}
-
-function setSearchEngine(value) {
-    if (settings) settings.setSearchEngine(value);
-}
-
-function clearData() {
-    if (settings) settings.clearData();
+    if (settings) settings.setTheme("light");
 }
 </script>
 

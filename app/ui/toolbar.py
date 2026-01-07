@@ -12,13 +12,16 @@ from app.ui.menu import BrowserMenu
 
 
 class BrowserToolbar(QWidget):
-    def __init__(self, webview):
+    def __init__(self, webview, browser):
         super().__init__()
 
         self.setObjectName("BrowserToolbar")
 
         self.webview = webview
         self.settings = Settings()
+        self.browser = browser
+        self.settings = browser.settings
+
 
         self.setFixedHeight(44)
 
