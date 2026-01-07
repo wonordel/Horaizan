@@ -12,6 +12,8 @@ class WebView(QWebEngineView):
 
         self.channel = QWebChannel(self)
         self.bridge = SettingsBridge(window)
+
+        # регистрируем как "bridge"
         self.channel.registerObject("bridge", self.bridge)
 
         page = BrowserPage(profile, self)

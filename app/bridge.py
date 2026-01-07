@@ -6,6 +6,7 @@ class SettingsBridge(QObject):
         super().__init__()
         self.browser = browser
 
+    # ===== THEME =====
     @Slot(str)
     def setTheme(self, theme: str):
         """
@@ -17,3 +18,24 @@ class SettingsBridge(QObject):
     @Slot(result=str)
     def getTheme(self):
         return self.browser.settings.theme()
+
+    # ===== SEARCH ENGINE =====
+    @Slot(result=str)
+    def getSearchEngine(self):
+        return self.browser.settings.search_engine_name()
+
+    @Slot(str)
+    def setSearchEngine(self, value):
+        print("SET SEARCH ENGINE:", value)
+        self.browser.settings.set_search_engine_name(value)
+
+    # ===== CLEAR DATA =====
+    @Slot()
+    def clearData(self):
+        print("CLEAR COOKIES + CACHE")
+
+        profile = self.browser.profile
+        profile.cookieStore().deleteAllCookies()
+        profile.clearHttpCache()
+
+        print("DONE")

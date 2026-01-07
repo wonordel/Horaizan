@@ -120,8 +120,9 @@ select {
             <!-- THEME -->
             <div class="option">
                 <label>Тема</label>
-                <button onclick="setDarkTheme()">Тёмная</button>
-                <button onclick="setLightTheme()">Светлая</button>
+                <button onclick="setTheme('dark')">Тёмная</button>
+                <button onclick="setTheme('light')">Светлая</button>
+
             </div>
 
             <!-- SEARCH ENGINE -->
@@ -138,8 +139,7 @@ select {
             <!-- CLEAR DATA -->
             <div class="option">
                 <label>Данные браузера</label>
-                <button class="primary" onclick="clearData()">
-                    Очистить cookies и кеш
+               <button onclick="clearData()">Очистить cookies и кеш</button>
                 </button>
             </div>
 
@@ -149,25 +149,39 @@ select {
 </div>
 
 <script>
-let settings = null;
+let bridge = null;
 
-new QWebChannel(qt.webChannelTransport, function(channel) {
-    settings = channel.objects.bridge;
-    console.log("Bridge ready", settings);
+/* === INIT WEBCHANNEL === */
+new QWebChannel(qt.webChannelTransport, function (channel) {
+    bridge = channel.objects.bridge;
+    console.log("Bridge ready:", bridge);
 
-    // применяем текущую тему при открытии
-    settings.getTheme(function(theme) {
+    // получить текущую тему при открытии
+    bridge.getTheme(function (theme) {
         console.log("Current theme:", theme);
     });
 });
 
-function setDarkTheme() {
-    if (settings) settings.setTheme("dark");
+/* === THEME === */
+function setTheme(theme) {
+    if (!bridge) {
+        console.warn("Bridge not ready");
+        return;
+    }
+    bridge.setTheme(theme);
 }
 
-function setLightTheme() {
-    if (settings) settings.setTheme("light");
+/* === CLEAR DATA === */
+function clearData() {
+    if (!bridge) {
+        console.warn("Bridge not ready");
+        return;
+    }
+
+    bridge.clearData();
+    alert("Cookies и кеш очищены");
 }
+
 </script>
 
 </body>

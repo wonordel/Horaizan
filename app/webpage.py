@@ -8,10 +8,7 @@ class BrowserPage(QWebEnginePage):
         self.webview = webview
 
     def acceptNavigationRequest(self, url, nav_type, is_main):
-        url_str = url.toString()
-        print("NAVIGATION:", url_str)
-
-        if url_str == "horaizan://settings":
+        if url.toString() == "horaizan://settings":
             self.webview.setHtml(SETTINGS_HTML)
             return False
 
