@@ -107,7 +107,7 @@ python -m app.main
 
 ## Acknowledgements
 
-Thanks to the PySide6 community and everyone who has contributed to the development of this project ❤️.
+Thanks to the PySide6 community, ChatGPT, DeepSeek and everyone who has contributed to the development of this project ❤️.
 
 ---
 
