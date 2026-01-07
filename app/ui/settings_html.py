@@ -1,10 +1,11 @@
-SETTINGS_HTML = """
+SETTINGS_HTML = r"""
 <!DOCTYPE html>
 <html lang="ru">
 <head>
 <meta charset="UTF-8">
-<title>Settings</title>
+<title>Настройки</title>
 
+<!-- Qt WebChannel -->
 <script src="qrc:///qtwebchannel/qwebchannel.js"></script>
 
 <style>
@@ -13,84 +14,175 @@ SETTINGS_HTML = """
     --panel: #2b2a33;
     --text: #ffffff;
     --accent: #00c2ff;
+    --border: #3a3944;
 }
 
 body {
     margin: 0;
-    font-family: system-ui, sans-serif;
+    height: 100vh;
+    font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
     background: var(--bg);
     color: var(--text);
 }
 
 .container {
     display: flex;
-    height: 100vh;
+    height: 100%;
 }
 
+/* ===== SIDEBAR ===== */
 .sidebar {
-    width: 220px;
+    width: 240px;
     background: var(--panel);
     padding: 20px;
+    box-sizing: border-box;
 }
 
+.sidebar h1 {
+    font-size: 18px;
+    margin: 0 0 20px 0;
+}
+
+/* ===== CONTENT ===== */
 .content {
     flex: 1;
     padding: 30px;
+    box-sizing: border-box;
+}
+
+.section {
+    max-width: 640px;
+}
+
+.section h2 {
+    margin-top: 0;
+    font-size: 22px;
 }
 
 .option {
-    margin-bottom: 20px;
+    margin-bottom: 24px;
+}
+
+label {
+    display: block;
+    margin-bottom: 8px;
+    opacity: 0.9;
+}
+
+/* ===== CONTROLS ===== */
+button {
+    background: var(--panel);
+    color: var(--text);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 8px 14px;
+    font-size: 14px;
+    cursor: pointer;
+    margin-right: 8px;
+}
+
+button:hover {
+    background: #3a3944;
+}
+
+button.primary {
+    background: var(--accent);
+    color: #000;
+    border: none;
+}
+
+select {
+    background: var(--panel);
+    color: var(--text);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 8px 10px;
+    font-size: 14px;
 }
 </style>
 </head>
 
 <body>
+
 <div class="container">
 
-<div class="sidebar">
-    <h3>Настройки</h3>
-</div>
-
-<div class="content">
-    <div class="option">
-        <label>
-            <input type="checkbox" id="themeToggle">
-            Тёмная тема
-        </label>
+    <!-- SIDEBAR -->
+    <div class="sidebar">
+        <h1>Настройки</h1>
     </div>
 
-    <div class="option">
-        <label>Поисковая система</label><br><br>
-        <select id="search">
-            <option>Google</option>
-            <option>Yandex</option>
-            <option>Bing</option>
-            <option>DuckDuckGo</option>
-        </select>
-    </div>
+    <!-- CONTENT -->
+    <div class="content">
+        <div class="section">
 
-    <div class="option">
-        <button onclick="settings.clearData()">
-            Очистить cookies и кеш
-        </button>
+            <h2>Основные</h2>
+
+            <!-- THEME -->
+            <div class="option">
+                <label>Тема</label>
+                <button onclick="setDarkTheme()">Тёмная</button>
+                <button onclick="setLightTheme()">Светлая</button>
+            </div>
+
+            <!-- SEARCH ENGINE -->
+            <div class="option">
+                <label>Поисковая система</label>
+                <select onchange="setSearchEngine(this.value)">
+                    <option value="Google">Google</option>
+                    <option value="DuckDuckGo">DuckDuckGo</option>
+                    <option value="Bing">Bing</option>
+                    <option value="Yandex">Yandex</option>
+                </select>
+            </div>
+
+            <!-- CLEAR DATA -->
+            <div class="option">
+                <label>Данные браузера</label>
+                <button class="primary" onclick="clearData()">
+                    Очистить cookies и кеш
+                </button>
+            </div>
+
+        </div>
     </div>
-</div>
 
 </div>
 
 <script>
-new QWebChannel(qt.webChannelTransport, function(channel) {
-    window.settings = channel.objects.settings;
+let settings = null;
 
-    document.getElementById("themeToggle").onchange = function() {
-        settings.setDarkTheme(this.checked);
-    };
+/* ===== INIT WEBCHANNEL (CORRECT WAY) ===== */
+function initWebChannel() {
+    new QWebChannel(qt.webChannelTransport, function(channel) {
+        settings = channel.objects.settings;
+        console.log("QWebChannel ready:", settings);
+    });
+}
 
-    document.getElementById("search").onchange = function() {
-        settings.setSearchEngine(this.value);
-    };
-});
+if (typeof qt !== "undefined") {
+    initWebChannel();
+} else {
+    document.addEventListener("qtwebchannelready", initWebChannel);
+}
+
+/* ===== SAFE WRAPPERS ===== */
+function setDarkTheme() {
+    if (settings) settings.setDarkTheme();
+}
+
+function setLightTheme() {
+    if (settings) settings.setLightTheme();
+}
+
+function setSearchEngine(value) {
+    if (settings) settings.setSearchEngine(value);
+}
+
+function clearData() {
+    if (settings) settings.clearData();
+}
 </script>
+
 </body>
 </html>
 """

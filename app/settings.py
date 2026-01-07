@@ -2,56 +2,61 @@ from PySide6.QtCore import QSettings
 
 
 class Settings:
-    def __init__(self):
-        self.settings = QSettings("Horaizan", "Browser")
+    ORGANIZATION = "Horaizan"
+    APPLICATION = "Browser"
 
-    def search_engine(self):
-        return self.settings.value(
-            "search_engine",
-            "https://www.google.com/search?q=",
+    DEFAULT_SEARCH_ENGINE = "Google"
+    DEFAULT_THEME = "dark"
+
+    SEARCH_ENGINES = {
+        "Google": "https://www.google.com/search?q=",
+        "Yandex": "https://yandex.ru/search/?text=",
+        "Bing": "https://www.bing.com/search?q=",
+        "DuckDuckGo": "https://duckduckgo.com/?q=",
+    }
+
+    def __init__(self):
+        self._settings = QSettings(
+            self.ORGANIZATION,
+            self.APPLICATION
+        )
+
+    # ======================
+    # THEME
+    # ======================
+
+    def theme(self) -> str:
+        return self._settings.value(
+            "theme",
+            self.DEFAULT_THEME,
             type=str
         )
 
-    def set_search_engine(self, url):
-        self.settings.setValue("search_engine", url)
-    def is_dark(self):
-        return self.settings.value("dark_theme", True, bool)
+    def set_theme(self, theme: str):
+        if theme in ("dark", "light"):
+            self._settings.setValue("theme", theme)
 
-    def set_dark(self, value):
-        self.settings.setValue("dark_theme", value)
+    def is_dark(self) -> bool:
+        return self.theme() == "dark"
 
-    def toggle_theme(self, state):
-        self.settings.set_dark(bool(state))
-        self.apply_theme()
-    
-    def apply_theme(self):
-        theme = "dark.qss" if self.settings.is_dark() else "light.qss"
-        path = Path(__file__).parent / "themes" / theme
-        with open(path) as f:
-            self.setStyleSheet(f.read())
-    def search_engine_name(self):
-        url = self.search_engine()
+    # ======================
+    # SEARCH ENGINE
+    # ======================
 
-        engines = {
-            "Google": "https://www.google.com/search?q=",
-            "Yandex": "https://yandex.ru/search/?text=",
-            "Bing": "https://www.bing.com/search?q=",
-            "DuckDuckGo": "https://duckduckgo.com/?q="
-        }
-
-        for name, engine_url in engines.items():
-            if engine_url == url:
-                return name
-
-        return "Google"
+    def search_engine_name(self) -> str:
+        return self._settings.value(
+            "search_engine",
+            self.DEFAULT_SEARCH_ENGINE,
+            type=str
+        )
 
     def set_search_engine_name(self, name: str):
-        engines = {
-            "Google": "https://www.google.com/search?q=",
-            "Yandex": "https://yandex.ru/search/?text=",
-            "Bing": "https://www.bing.com/search?q=",
-            "DuckDuckGo": "https://duckduckgo.com/?q="
-        }
+        if name in self.SEARCH_ENGINES:
+            self._settings.setValue("search_engine", name)
 
-        if name in engines:
-            self.set_search_engine(engines[name])
+    def search_engine_url(self) -> str:
+        name = self.search_engine_name()
+        return self.SEARCH_ENGINES.get(
+            name,
+            self.SEARCH_ENGINES[self.DEFAULT_SEARCH_ENGINE]
+        )

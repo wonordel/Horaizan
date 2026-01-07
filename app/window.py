@@ -12,7 +12,9 @@ from app.webview import WebView
 from app.ui.toolbar import BrowserToolbar
 from app.profile import create_profile
 from app.settings import Settings
-from app.ui.settings_page import SettingsPage
+from pathlib import Path
+import os
+
 
 
 class BrowserWindow(QMainWindow):
@@ -148,7 +150,24 @@ class BrowserWindow(QMainWindow):
         except FileNotFoundError:
             pass
 
-    def set_theme(self, theme):
-        path = f"app/ui/styles/{theme}.qss"
-        with open(path, "r") as f:
+    def set_theme(self, theme: str):
+        if theme not in ("dark", "light"):
+            return
+
+        self.settings.set_theme(theme)
+
+        theme_path = (
+            Path(__file__).parent
+            / "themes"
+            / f"{theme}.qss"
+        )
+
+        if not theme_path.exists():
+            print("Theme not found:", theme_path)
+            return
+
+        with open(theme_path, "r", encoding="utf-8") as f:
             self.setStyleSheet(f.read())
+
+    def apply_theme_from_settings(self):
+        self.set_theme(self.settings.theme())

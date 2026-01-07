@@ -18,7 +18,7 @@ Horaizan - is a minimalistic open source web browser developed using PySide6. Th
 2. Clone the repository:
 
    ```bash
-   git clone https://github.com/egor54325/Horaizan.git
+   git clone https://github.com/wonordel/Horaizan.git
    cd horaizan
    ```
 

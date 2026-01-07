@@ -8,12 +8,11 @@ class SettingsBridge(QObject):
 
     @Slot(result=str)
     def getTheme(self):
-        return "dark" if self.browser.settings.is_dark() else "light"
+        return self.browser.settings.theme()
 
     @Slot(str)
     def setTheme(self, value):
-        self.browser.settings.set_dark(value == "dark")
-        self.browser.apply_theme()
+        self.browser.set_theme(value)
 
     @Slot(result=str)
     def getSearchEngine(self):

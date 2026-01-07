@@ -87,8 +87,9 @@ class BrowserToolbar(QWidget):
             self.webview.setUrl(QUrl(f"https://{text}"))
             return
 
-        search_url = self.settings.search_engine()
+        search_url = self.settings.search_engine_url()
         self.webview.setUrl(QUrl(f"{search_url}{text}"))
+
 
     def update_url(self, url: QUrl):
         if url.scheme() == "horaizan":

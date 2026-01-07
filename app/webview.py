@@ -3,18 +3,19 @@ from PySide6.QtWebChannel import QWebChannel
 from PySide6.QtCore import QUrl
 
 from app.webpage import BrowserPage
-from app.settings_bridge import SettingsBridge
+from app.bridge import SettingsBridge
 
 
 class WebView(QWebEngineView):
     def __init__(self, profile, window):
         super().__init__()
 
-        page = BrowserPage(profile, self)
-        self.setPage(page)
+        self.channel = QWebChannel(self)
+        self.bridge = SettingsBridge(window)
+        self.channel.registerObject("bridge", self.bridge)
 
-        channel = QWebChannel(self)
-        channel.registerObject("settings", SettingsBridge(window))
-        self.page().setWebChannel(channel)
+        page = BrowserPage(profile, self)
+        page.setWebChannel(self.channel)
+        self.setPage(page)
 
         self.setUrl(QUrl("https://www.google.com"))
