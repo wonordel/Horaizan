@@ -20,14 +20,13 @@ class SettingsBridge(QObject):
         return self.browser.settings.theme()
 
     # ===== SEARCH ENGINE =====
+    @Slot(str)
+    def setSearchEngine(self, value):
+        self.browser.settings.set_search_engine_name(value)
+
     @Slot(result=str)
     def getSearchEngine(self):
         return self.browser.settings.search_engine_name()
-
-    @Slot(str)
-    def setSearchEngine(self, value):
-        print("SET SEARCH ENGINE:", value)
-        self.browser.settings.set_search_engine_name(value)
 
     # ===== CLEAR DATA =====
     @Slot()

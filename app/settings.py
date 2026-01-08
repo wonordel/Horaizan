@@ -15,6 +15,13 @@ class Settings:
         "DuckDuckGo": "https://duckduckgo.com/?q=",
     }
 
+    SEARCH_ENGINE_HOME = {
+        "Google": "https://www.google.com/",
+        "Yandex": "https://ya.ru/",
+        "Bing": "https://www.bing.com/",
+        "DuckDuckGo": "https://duckduckgo.com/",
+    }
+
     def __init__(self):
         self._settings = QSettings(
             self.ORGANIZATION,
@@ -59,4 +66,11 @@ class Settings:
         return self.SEARCH_ENGINES.get(
             name,
             self.SEARCH_ENGINES[self.DEFAULT_SEARCH_ENGINE]
+        )
+
+    def search_engine_home_url(self) -> str:
+        name = self.search_engine_name()
+        return self.SEARCH_ENGINE_HOME.get(
+            name,
+            self.SEARCH_ENGINE_HOME[self.DEFAULT_SEARCH_ENGINE]
         )

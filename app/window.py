@@ -43,6 +43,10 @@ class BrowserWindow(QMainWindow):
         index = self.tabs.addTab(container, "New Tab")
         self.tabs.setCurrentIndex(index)
 
+        # ✅ ВАЖНО: открываем стартовую страницу выбранного поисковика
+        home_url = self.settings.search_engine_home_url()
+        view.setUrl(QUrl(home_url))
+
 
     def clear_browser_data(self):
         self.profile.clearHttpCache()

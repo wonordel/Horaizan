@@ -128,12 +128,13 @@ select {
             <!-- SEARCH ENGINE -->
             <div class="option">
                 <label>Поисковая система</label>
-                <select onchange="setSearchEngine(this.value)">
+                <select onchange="setSearchEngine(this.value)" id="search">
                     <option value="Google">Google</option>
-                    <option value="DuckDuckGo">DuckDuckGo</option>
-                    <option value="Bing">Bing</option>
                     <option value="Yandex">Yandex</option>
+                    <option value="Bing">Bing</option>
+                    <option value="DuckDuckGo">DuckDuckGo</option>
                 </select>
+
             </div>
 
             <!-- CLEAR DATA -->
@@ -151,33 +152,36 @@ select {
 <script>
 let bridge = null;
 
-/* === INIT WEBCHANNEL === */
 new QWebChannel(qt.webChannelTransport, function (channel) {
     bridge = channel.objects.bridge;
     console.log("Bridge ready:", bridge);
 
-    // получить текущую тему при открытии
     bridge.getTheme(function (theme) {
         console.log("Current theme:", theme);
     });
+
+    bridge.getSearchEngine(function (engine) {
+        console.log("Current search engine:", engine);
+        const select = document.getElementById("search");
+        if (select) select.value = engine;
+    });
 });
 
-/* === THEME === */
-function setTheme(theme) {
-    if (!bridge) {
-        console.warn("Bridge not ready");
-        return;
-    }
-    bridge.setTheme(theme);
+/* ===== THEME ===== */
+function setTheme(value) {
+    if (!bridge) return;
+    bridge.setTheme(value);
 }
 
-/* === CLEAR DATA === */
-function clearData() {
-    if (!bridge) {
-        console.warn("Bridge not ready");
-        return;
-    }
+/* ===== SEARCH ENGINE ===== */
+function setSearchEngine(value) {
+    if (!bridge) return;
+    bridge.setSearchEngine(value);
+}
 
+/* ===== CLEAR DATA ===== */
+function clearData() {
+    if (!bridge) return;
     bridge.clearData();
     alert("Cookies и кеш очищены");
 }
