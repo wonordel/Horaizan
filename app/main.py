@@ -9,8 +9,15 @@ def main():
     # Устанавливаем локаль UTF-8
     locale.setlocale(locale.LC_ALL, 'en_US.UTF-8')
     
-    # Устанавливаем платформу (попробуйте разные варианты)
-    os.environ["QT_QPA_PLATFORM"] = "xcb"  # или "wayland"
+    # Устанавливаем платформу в зависимости от ОС
+    if sys.platform == "linux":
+        os.environ["QT_QPA_PLATFORM"] = "xcb"  # или "wayland"
+    elif sys.platform == "win32":
+        # На Windows Qt сам выберет правильную платформу
+        # Можно удалить эту строку или оставить как есть
+        pass
+    elif sys.platform == "darwin":
+        os.environ["QT_QPA_PLATFORM"] = "cocoa"
     
     app = QApplication(sys.argv)
     window = BrowserWindow()
