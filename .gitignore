@@ -1,2 +1,9 @@
 app/__pycache__
 __pycache__
+paru
+app/ui/__pycache__
+build
+dist
+Horaizan.spec
+Horaizan.AppDir
+Horaizan_Browser-x86_64.AppImage

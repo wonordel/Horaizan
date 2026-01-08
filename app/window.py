@@ -1,11 +1,20 @@
 from PySide6.QtWidgets import QMainWindow,QTabWidget,QWidget,QVBoxLayout,QToolButton
 from PySide6.QtCore import Qt,QUrl
 from pathlib import Path
-
 from app.webview import WebView
 from app.ui.toolbar import BrowserToolbar
 from app.profile import create_profile
 from app.settings import Settings
+import sys
+
+def get_resource_path(relative_path: str) -> Path:
+    if hasattr(sys, "_MEIPASS"):
+        return Path(sys._MEIPASS) / relative_path
+    return Path(__file__).parent / relative_path
+def resource_path(path: str) -> Path:
+    if hasattr(sys, "_MEIPASS"):
+        return Path(sys._MEIPASS) / path
+    return Path(__file__).parent / path
 
 
 class BrowserWindow(QMainWindow):
@@ -58,11 +67,7 @@ class BrowserWindow(QMainWindow):
 
         self.settings.set_theme(theme)
 
-        theme_path = (
-            Path(__file__).parent
-            / "themes"
-            / f"{theme}.qss"
-        )
+        theme_path = resource_path(f"app/themes/{theme}.qss")
 
         if not theme_path.exists():
             print("Theme not found:", theme_path)
@@ -70,3 +75,4 @@ class BrowserWindow(QMainWindow):
 
         with open(theme_path, "r", encoding="utf-8") as f:
             self.setStyleSheet(f.read())
+

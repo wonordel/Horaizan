@@ -39,6 +39,10 @@ python3 -m app.main
 ```
 (if it throws an error, restart it several times)
 
+or else:
+
+you can download the AppImage version in the [releases](https://github.com/wonordel/Horaizan/releases/tag/releases) and run it (only on linux)
+
 To launch the browser on Windows 🪟:
 
 ```batch
