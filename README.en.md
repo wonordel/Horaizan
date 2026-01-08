@@ -111,4 +111,4 @@ Thanks to the PySide6 community, ChatGPT, DeepSeek and everyone who has contribu
 
 ---
 
-**Note**: This project is in an inactive development stage and various bugs may appear(they will be here, I made it myself). If you find errors or have suggestions for improvement, please do not create an issue or submit a pull request ❤️.
+**Note**: This project is in an inactive development stage and various bugs may appear(they will be here, I made it myself). If you find errors or have suggestions for improvement, please create an issue or submit a pull request ❤️.
