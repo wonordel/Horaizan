@@ -11,7 +11,7 @@ Horaizan - is a minimalistic open source web browser developed using PySide6. Th
 - **Minimalistic interface**: A simple and intuitive interface that doesn't distract from the main content.
 - **Tab management**: The ability to open and close tabs.
 - **Search engine customization**: Choose from popular search engines such as Google, Yandex, DuckDuckGo, and Bing.
-- **Privacy**: Our browser will *never* be monitored by anyone (we don't talk about websites), we promise 🤫.
+- **Privacy**: Our browser will *never* send sensitive data (cookies, history, etc.) to developers or anyone else, we promise 🤫.
 - **Change the theme to your liking**: The browser allows you to change the theme in the settings, from black to white!
 
 ## Installation
@@ -38,10 +38,6 @@ To launch the browser, run the following command (Linux 🐧):
 python3 -m app.main
 ```
 (if it throws an error, restart it several times)
-
-or else:
-
-you can download the AppImage version in the [releases](https://github.com/wonordel/Horaizan/releases/tag/releases) and run it (only on linux)
 
 To launch the browser on Windows 🪟:
 
