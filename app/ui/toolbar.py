@@ -78,6 +78,10 @@ class BrowserToolbar(QWidget):
         if not text:
             return
 
+        if text == "horaizan://settings":
+            self.browser.open_settings()
+            return
+
         if text.startswith(("http://", "https://")):
             self.webview.setUrl(QUrl(text))
             return
@@ -102,14 +106,7 @@ class BrowserToolbar(QWidget):
 
     def open_settings(self):
         print("OPEN SETTINGS CALLED")
-
-        # напрямую говорим webview загрузить URL
-        # и НЕ ТРОГАЕМ address_bar
-        self.webview.page().acceptNavigationRequest(
-            QUrl("horaizan://settings"),
-            None,
-            True
-        )
+        self.browser.open_settings()
 
 
 
@@ -127,4 +124,3 @@ class BrowserToolbar(QWidget):
             text = "https://" + text
 
         self.webview.setUrl(QUrl(text))
-

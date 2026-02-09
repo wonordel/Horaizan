@@ -4,7 +4,6 @@ from PySide6.QtCore import QUrl
 
 from app.webpage import BrowserPage
 from app.bridge import SettingsBridge
-from app.settings import Settings
 
 class WebView(QWebEngineView):
     def __init__(self, profile, window):
@@ -19,5 +18,6 @@ class WebView(QWebEngineView):
         page = BrowserPage(profile, self)
         page.setWebChannel(self.channel)
         self.setPage(page)
-        settings = Settings()
-        self.setUrl(QUrl(settings.search_engine_url()))
+
+    def open_settings_page(self):
+        self.setHtml(self.page().settings_html(), QUrl("horaizan://settings"))
