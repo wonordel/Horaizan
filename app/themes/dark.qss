@@ -1,115 +1,110 @@
-/* ===== GLOBAL ===== */
+/* Firefox-inspired dark look */
 * {
-    font-family: Inter, "Segoe UI", "Noto Sans", sans-serif;
+    font-family: "Noto Sans", "Segoe UI", sans-serif;
     font-size: 13px;
 }
 
-/* ===== WINDOW ===== */
 QMainWindow {
-    background-color: #1c1b22;
+    background: #151823;
 }
 
-/* ===== TOOLBAR ===== */
 QWidget#BrowserToolbar {
-    background-color: #2b2a33;
-    border-bottom: 1px solid #3a3944;
+    background: qlineargradient(
+        x1:0, y1:0, x2:0, y2:1,
+        stop:0 #222634,
+        stop:1 #1a1e2a
+    );
+    border-bottom: none;
 }
 
-/* ===== BUTTONS ===== */
-QToolButton {
+QToolButton#ToolbarMenuButton,
+QToolButton#NavButton,
+QToolButton#WindowButton,
+QToolButton#AddTabButton {
+    min-width: 28px;
+    min-height: 28px;
+    border: 1px solid transparent;
+    border-radius: 14px;
+    color: #edf2ff;
     background: transparent;
-    border: none;
-    color: #e0e0e6;
-    padding: 6px;
-    border-radius: 6px;
+    padding: 0 8px;
 }
 
-QToolButton:hover {
-    background-color: #3a3944;
+QToolButton#ToolbarMenuButton:hover,
+QToolButton#NavButton:hover,
+QToolButton#WindowButton:hover,
+QToolButton#AddTabButton:hover {
+    background: #2c3346;
+    border-color: #3a4358;
 }
 
-QToolButton:pressed {
-    background-color: #4a4954;
+QToolButton#ToolbarMenuButton:pressed,
+QToolButton#NavButton:pressed,
+QToolButton#WindowButton:pressed,
+QToolButton#AddTabButton:pressed {
+    background: #3a4258;
 }
 
-/* ===== ADDRESS BAR ===== */
-QLineEdit {
-    background-color: #1c1b22;
-    border: 1px solid #3a3944;
-    border-radius: 8px;
-    padding: 6px 10px;
+QToolButton#CloseButton {
+    min-width: 28px;
+    min-height: 28px;
+    border-radius: 14px;
+    color: #ffdce0;
+    background: transparent;
+}
+
+QToolButton#CloseButton:hover {
+    background: #b6253e;
     color: #ffffff;
 }
 
-QLineEdit:focus {
-    border: 1px solid #7c7cff;
+QLineEdit#AddressBar {
+    background: #0f1320;
+    border: 1px solid #364056;
+    border-radius: 16px;
+    color: #f7fbff;
+    padding: 6px 12px;
+    selection-background-color: #3559b8;
 }
 
-/* ===== TABS ===== */
+QLineEdit#AddressBar:focus {
+    border: 1px solid #78b7ff;
+    background: #121827;
+}
+
 QTabWidget::pane {
     border: none;
-    background-color: #1c1b22;
+    border-top: 1px solid #2d3448;
+    background: #151823;
+    top: 0;
+}
+
+QTabBar {
+    qproperty-drawBase: 0;
 }
 
 QTabBar::tab {
-    background-color: #2b2a33;
-    color: #e0e0e6;
-    padding: 6px 12px;
-    margin: 4px 2px;
-    border-radius: 8px;
-}
-
-QTabBar::tab:selected {
-    background-color: #42414d;
+    min-height: 28px;
+    min-width: 140px;
+    max-width: 220px;
+    padding: 4px 10px;
+    margin: 5px 3px 1px 3px;
+    border: 1px solid #30384c;
+    border-radius: 10px;
+    background: #23293a;
+    color: #d9e2ff;
 }
 
 QTabBar::tab:hover {
-    background-color: #3a3944;
+    background: #2d3548;
 }
 
-/* ===== CLOSE BUTTON (hover only) ===== */
+QTabBar::tab:selected {
+    background: #3b4c78;
+    border-color: #5672b4;
+    color: #ffffff;
+}
+
 QTabBar::close-button {
-    image: none;
-}
-
-QToolButton {
-    font-size: 14px;
-}
-
-QToolButton:hover {
-    background-color: #3a3944;
-}
-
-QToolButton[text="✕"]:hover {
-    background-color: #c42b1c;
-}
-
-QToolButton {
-    font-size: 14px;
-}
-
-QToolButton:hover {
-    background-color: #3a3944;
-}
-
-QToolButton[text="✕"]:hover {
-    background-color: #c42b1c;
-}
-
-#SettingsPage {
-    background-color: #1c1b22;
-    color: #ffffff;
-}
-
-#SettingsPage QLabel {
-    color: #ffffff;
-}
-
-#SettingsPage QComboBox,
-#SettingsPage QPushButton,
-#SettingsPage QCheckBox {
-    background-color: #2b2a33;
-    color: #ffffff;
-    border-radius: 6px;
-    padding: 6px;
+    margin-right: 2px;
 }

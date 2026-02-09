@@ -350,6 +350,16 @@ button.danger {
 
             <div class="row">
                 <div>
+                    <div class="label">Окно инкогнито</div>
+                    <div class="help">Открывает отдельное приватное окно без сохранения истории и cookies на диск.</div>
+                </div>
+                <div class="controls">
+                    <button onclick="openIncognito()">Открыть инкогнито</button>
+                </div>
+            </div>
+
+            <div class="row">
+                <div>
                     <div class="label">Сброс настроек</div>
                     <div class="help">Вернуть все настройки (включая горячие клавиши) к значениям по умолчанию.</div>
                 </div>
@@ -371,6 +381,17 @@ button.danger {
                 <div class="controls">
                     <input id="shortcut-new_tab" class="shortcut" type="text" value="" onkeydown="captureShortcut(event, this)">
                     <button onclick="saveShortcut('new_tab')">Сохранить</button>
+                </div>
+            </div>
+
+            <div class="row">
+                <div>
+                    <div class="label">Новое окно инкогнито</div>
+                    <div class="help">Действие: открыть отдельное приватное окно.</div>
+                </div>
+                <div class="controls">
+                    <input id="shortcut-open_incognito" class="shortcut" type="text" value="" onkeydown="captureShortcut(event, this)">
+                    <button onclick="saveShortcut('open_incognito')">Сохранить</button>
                 </div>
             </div>
 
@@ -453,6 +474,7 @@ let confirmClearDataEnabled = true;
 
 const shortcutActions = [
     'new_tab',
+    'open_incognito',
     'close_tab',
     'reload',
     'focus_address',
@@ -570,6 +592,12 @@ function clearData() {
 
     bridge.clearData();
     toast('Cookies и кеш очищены');
+}
+
+function openIncognito() {
+    if (!bridge) return;
+    bridge.openIncognitoWindow();
+    toast('Окно инкогнито открыто');
 }
 
 function captureShortcut(event, input) {

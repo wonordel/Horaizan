@@ -4,11 +4,9 @@ from PySide6.QtWidgets import (
     QToolButton,
     QHBoxLayout,
     QLineEdit,
-    QApplication
+    QApplication,
 )
 from PySide6.QtCore import QUrl
-from app.settings import Settings
-from app.ui.menu import BrowserMenu
 
 
 class BrowserToolbar(QWidget):
@@ -18,51 +16,59 @@ class BrowserToolbar(QWidget):
         self.setObjectName("BrowserToolbar")
 
         self.webview = webview
-        self.settings = Settings()
         self.browser = browser
         self.settings = browser.settings
 
-
-        self.setFixedHeight(44)
+        self.setFixedHeight(46)
 
         layout = QHBoxLayout(self)
         layout.setContentsMargins(8, 6, 8, 6)
         layout.setSpacing(6)
 
-        self.back_btn = QToolButton()
-        self.back_btn.setText("◀")
-        self.back_btn.clicked.connect(self.webview.back)
-
-        self.forward_btn = QToolButton()
-        self.forward_btn.setText("▶")
-        self.forward_btn.clicked.connect(self.webview.forward)
-
-        self.reload_btn = QToolButton()
-        self.reload_btn.setText("⟳")
-        self.reload_btn.clicked.connect(self.webview.reload)
-
-        self.address_bar = QLineEdit()
-        self.address_bar.setPlaceholderText("Введите адрес или поисковый запрос")
-        self.address_bar.setMinimumHeight(30)
-        self.address_bar.setClearButtonEnabled(True)
-        self.address_bar.returnPressed.connect(self.load_url)
-
-        self.minimize_btn = QToolButton()
-        self.minimize_btn.setText("—")
-        self.minimize_btn.clicked.connect(self.window().showMinimized)
-
-        self.close_btn = QToolButton()
-        self.close_btn.setText("✕")
-        self.close_btn.clicked.connect(QApplication.quit)
         self.menu_button = QToolButton()
+        self.menu_button.setObjectName("ToolbarMenuButton")
         self.menu_button.setText("☰")
         self.menu_button.setToolTip("Настройки")
         self.menu_button.clicked.connect(self.open_settings)
 
+        self.back_btn = QToolButton()
+        self.back_btn.setObjectName("NavButton")
+        self.back_btn.setText("◀")
+        self.back_btn.setToolTip("Назад")
+        self.back_btn.clicked.connect(self.webview.back)
+
+        self.forward_btn = QToolButton()
+        self.forward_btn.setObjectName("NavButton")
+        self.forward_btn.setText("▶")
+        self.forward_btn.setToolTip("Вперёд")
+        self.forward_btn.clicked.connect(self.webview.forward)
+
+        self.reload_btn = QToolButton()
+        self.reload_btn.setObjectName("NavButton")
+        self.reload_btn.setText("⟳")
+        self.reload_btn.setToolTip("Обновить")
+        self.reload_btn.clicked.connect(self.webview.reload)
+
+        self.address_bar = QLineEdit()
+        self.address_bar.setObjectName("AddressBar")
+        self.address_bar.setPlaceholderText("Введите адрес или поисковый запрос")
+        self.address_bar.setMinimumHeight(32)
+        self.address_bar.setClearButtonEnabled(True)
+        self.address_bar.returnPressed.connect(self.load_url)
+
+        self.minimize_btn = QToolButton()
+        self.minimize_btn.setObjectName("WindowButton")
+        self.minimize_btn.setText("—")
+        self.minimize_btn.setToolTip("Свернуть")
+        self.minimize_btn.clicked.connect(self.window().showMinimized)
+
+        self.close_btn = QToolButton()
+        self.close_btn.setObjectName("CloseButton")
+        self.close_btn.setText("✕")
+        self.close_btn.setToolTip("Закрыть")
+        self.close_btn.clicked.connect(QApplication.quit)
+
         layout.addWidget(self.menu_button)
-
-
-
         layout.addWidget(self.back_btn)
         layout.addWidget(self.forward_btn)
         layout.addWidget(self.reload_btn)
@@ -97,7 +103,6 @@ class BrowserToolbar(QWidget):
         search_url = self.settings.search_engine_url()
         self.webview.setUrl(QUrl(f"{search_url}{text}"))
 
-
     def update_url(self, url: QUrl):
         if url.scheme() == "horaizan":
             self.address_bar.setText("Настройки")
@@ -108,14 +113,9 @@ class BrowserToolbar(QWidget):
         print("OPEN SETTINGS CALLED")
         self.browser.open_settings()
 
-
-
-
-
     def navigate(self):
         text = self.address_bar.text().strip()
 
-        # 🔴 ВАЖНО: не трогать horaizan://
         if text.startswith("horaizan://"):
             self.webview.setUrl(QUrl(text))
             return
