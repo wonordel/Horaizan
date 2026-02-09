@@ -39,6 +39,10 @@ class BrowserWindow(QMainWindow):
         super().__init__()
         self.incognito = incognito
 
+        app = QApplication.instance()
+        if app and not app.windowIcon().isNull():
+            self.setWindowIcon(app.windowIcon())
+
         self.resize(1240, 840)
         self.settings = Settings()
         self.profile = create_profile(incognito=self.incognito, parent=self)

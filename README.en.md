@@ -4,15 +4,20 @@
 [Русский](README.md)
 [English](README.en.md)
 
-Horaizan - is a minimalistic open source web browser developed using PySide6. The browser provides basic features for navigating web pages, managing tabs, customizing the appearance, and selecting a search engine 🌐.
+Horaizan is an open source browser built with PySide6 (Chromium/WebEngine). The project includes a custom UI, built-in settings, incognito mode, configurable shortcuts, and build tooling for Linux/Windows 🌐.
  
 ## Features
 
-- **Minimalistic interface**: A simple and intuitive interface that doesn't distract from the main content.
-- **Tab management**: The ability to open and close tabs.
-- **Search engine customization**: Choose from popular search engines such as Google, Yandex, DuckDuckGo, and Bing.
-- **Privacy**: Our browser will *never* send sensitive data (cookies, history, etc.) to developers or anyone else, we promise 🤫.
-- **Change the theme to your liking**: The browser allows you to change the theme in the settings, from black to white!
+- **Updated UI**: Top bar and tabs were redesigned (Firefox-inspired style, compact controls, cleaner address bar).
+- **Tabs with site icon and title**: Displays `favicon`, page title, movable tabs, and close controls.
+- **Built-in settings page**: `horaizan://settings` with sections:
+  - General (theme, search engine, new tab behavior)
+  - Privacy (cache/cookies cleanup, confirmation toggle, open incognito)
+  - Hotkeys (edit keyboard shortcuts)
+- **Themes**: `dark`, `light`, and `system` (follows OS theme).
+- **Incognito mode**: Separate window with non-persistent cookies/cache (default shortcut `Ctrl+Shift+N`).
+- **Custom hotkeys**: Standard shortcuts are supported (`Ctrl+T`, `Ctrl+W`, `Ctrl+R`, `Ctrl+L`, `Ctrl+,`, `Alt+Left`, `Alt+Right`) and can be changed in settings.
+- **App icon support**: Uses `app/themes/icon.png` for windows and builds.
 
 ## Installation
 
@@ -47,11 +52,39 @@ python -m app.main
 
 ## Usage
 
-- **Home page**: When you launch the browser, it opens google.com
+- **Home page**: At startup, the browser opens the home page of the selected search engine.
 - **New tab**: Click the "+" button next to the tabs to open a new tab.
 - **Navigation**: Use the "Back", "Forward", and "Reload" buttons to navigate through the pages.
 - **Address bar**: Enter a URL or search query in the address bar and press Enter.
-- **Settings**: In the "Menu" menu, you can change the search engine and appearance settings.
+- **Settings**: The `☰` button opens the internal settings page.
+- **Incognito**: Available from settings or via `Ctrl+Shift+N`.
+- **System theme**: When `system` is selected, the browser follows light/dark OS changes automatically.
+
+## Build and automation (`build.sh`)
+
+This repository includes an interactive build script:
+
+```bash
+./build.sh
+```
+
+Available options:
+
+- `1` - build `AppImage` (portable one-file)
+- `2` - build `.exe` (on Windows) + attempt NSIS installer
+- `5` - prepare/build `AUR` package
+- `4` - reinstall system and Python dependencies
+
+AppImage build notes:
+
+- The script checks for `appimagetool`; if missing, it tries to install `appimagetool-bin` via `yay` or `paru`.
+- AppImage icon is embedded from `app/themes/icon.png`.
+- Compression is set to `zstd` for wider runtime compatibility.
+- If your system has FUSE issues, run:
+
+```bash
+./dist/Horaizan-x86_64.AppImage --appimage-extract-and-run
+```
 
 ## Project structure
 ```
@@ -68,7 +101,6 @@ python -m app.main
 │   │   ├── settings.cpython-313.pyc
 │   │   ├── webview.cpython-313.pyc
 │   │   └── window.cpython-313.pyc
-│   ├── settings_bridge.py
 │   ├── settings.py
 │   ├── themes
 │   │   ├── dark.qss
@@ -81,23 +113,21 @@ python -m app.main
 │   │   │   ├── menu.cpython-313.pyc
 │   │   │   ├── settings_page.cpython-313.pyc
 │   │   │   └── toolbar.cpython-313.pyc
-│   │   ├── settings_dialog.py
 │   │   ├── settings_html.py
-│   │   ├── settings_page.py
 │   │   └── toolbar.py
-│   ├── web
-│   │   ├── settings.css
-│   │   ├── settings.html
-│   │   └── settings.js
 │   ├── webpage.py
 │   ├── webview.py
 │   └── window.py
+├── build.sh
 ├── README.en.md
 ├── README.md
-└── requirements.txt
+├── requirements.txt
+└── requirements-build.txt
 ```
 
-- **requirements.txt**: List of dependencies to install.
+- **requirements.txt**: Runtime dependencies.
+- **requirements-build.txt**: Python build dependencies.
+- **build.sh**: Interactive script for dependency install and builds.
 
 ## Authors
 
