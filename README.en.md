@@ -37,6 +37,31 @@ Horaizan is an open source browser built with PySide6 (Chromium/WebEngine). The 
    pip install -r requirements.txt
    ```
 
+### Install from local AUR files (without GitHub)
+
+If you already have the project directory with `packaging/aur`, you can install the browser directly from these files:
+
+1. Open the AUR files directory:
+
+   ```bash
+   cd /path/to/Horaizan/packaging/aur
+   ```
+
+2. Build and install the package:
+
+   ```bash
+   makepkg -Csi
+   ```
+
+3. (Optional) Set it as default browser:
+
+   ```bash
+   xdg-settings set default-web-browser horaizan.desktop
+   xdg-mime default horaizan.desktop x-scheme-handler/http
+   xdg-mime default horaizan.desktop x-scheme-handler/https
+   xdg-mime default horaizan.desktop application/pdf
+   ```
+
 ## Launching
 
 To launch the browser, run the following command (Linux 🐧):

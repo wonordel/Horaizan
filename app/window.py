@@ -2,7 +2,7 @@ from pathlib import Path
 import sys
 
 from PySide6.QtCore import Qt, QUrl, QSize, QStandardPaths
-from PySide6.QtGui import QKeySequence, QShortcut, QIcon
+from PySide6.QtGui import QKeySequence, QShortcut, QIcon, QCloseEvent
 from PySide6.QtWidgets import QMainWindow, QTabWidget, QWidget, QVBoxLayout, QToolButton, QApplication
 from PySide6.QtWebEngineCore import QWebEnginePage
 from PySide6.QtWebEngineWidgets import QWebEngineView
@@ -59,6 +59,7 @@ class BrowserWindow(QMainWindow):
         self.tabs.setIconSize(QSize(18, 18))
         self.tabs.tabCloseRequested.connect(self.on_tab_close_requested)
         self.tabs.currentChanged.connect(self._update_window_title)
+        self.tabs.currentChanged.connect(lambda _index: self._save_session_tabs())
 
         tab_bar = self.tabs.tabBar()
         tab_bar.setExpanding(False)
@@ -74,7 +75,11 @@ class BrowserWindow(QMainWindow):
         self.tabs.setCornerWidget(add, Qt.TopRightCorner)
 
         self._shortcuts: dict[str, QShortcut] = {}
+        self._reopen_tab_shortcut = QShortcut(QKeySequence("Ctrl+Shift+T"), self)
+        self._reopen_tab_shortcut.setContext(Qt.WindowShortcut)
+        self._reopen_tab_shortcut.activated.connect(self.reopen_last_closed_tab)
         self._devtools_windows: dict[WebView, QMainWindow] = {}
+        self._closed_tabs_stack: list[QUrl] = []
         self.download_manager = DownloadManagerDialog(self)
         self.history_manager = HistoryManagerDialog(self)
         self.cookie_manager = CookieManagerDialog(self.profile.cookieStore(), self)
@@ -83,7 +88,8 @@ class BrowserWindow(QMainWindow):
 
         self.profile.downloadRequested.connect(self._on_download_requested)
 
-        self.add_tab()
+        if self.incognito or not self._restore_session_tabs():
+            self.add_tab()
         self.set_theme(self.settings.theme())
         self.apply_shortcuts()
         self._bind_system_theme_change()
@@ -208,7 +214,7 @@ class BrowserWindow(QMainWindow):
             title += " [Инкогнито]"
         self.setWindowTitle(title)
 
-    def add_tab(self):
+    def add_tab(self, url: QUrl | None = None):
         container = QWidget()
         layout = QVBoxLayout(container)
         layout.setContentsMargins(0, 0, 0, 0)
@@ -229,14 +235,19 @@ class BrowserWindow(QMainWindow):
         view.titleChanged.connect(lambda text, v=view: self._update_tab_title(v, text))
         view.iconChanged.connect(lambda icon, v=view: self._update_tab_icon(v, icon))
         view.urlChanged.connect(lambda _url, v=view: self._update_tab_title(v))
+        view.urlChanged.connect(lambda _url: self._save_session_tabs())
         view.loadFinished.connect(lambda ok, v=view: self._record_history_for_view(v, ok))
 
-        mode = self.settings.new_tab_mode()
-        if mode == "blank":
-            view.setUrl(QUrl("about:blank"))
+        if url is not None and url.isValid() and not url.isEmpty():
+            view.setUrl(url)
         else:
-            home_url = self.settings.search_engine_home_url()
-            view.setUrl(QUrl(home_url))
+            mode = self.settings.new_tab_mode()
+            if mode == "blank":
+                view.setUrl(QUrl("about:blank"))
+            else:
+                home_url = self.settings.search_engine_home_url()
+                view.setUrl(QUrl(home_url))
+        self._save_session_tabs()
 
     def on_tab_close_requested(self, index: int):
         if index < 0:
@@ -246,13 +257,22 @@ class BrowserWindow(QMainWindow):
         if container is not None:
             webview = getattr(container, "webview", None)
             if webview:
+                closed_url = webview.url()
+                if (
+                    closed_url.isValid()
+                    and not closed_url.isEmpty()
+                    and closed_url.scheme() not in ("about", "horaizan")
+                ):
+                    self._closed_tabs_stack.append(closed_url)
                 self._close_devtools_for_view(webview)
 
         if self.tabs.count() <= 1:
+            self._save_session_tabs()
             self.close()
             return
 
         self.tabs.removeTab(index)
+        self._save_session_tabs()
         self._update_window_title()
 
     def close_current_tab(self):
@@ -275,6 +295,49 @@ class BrowserWindow(QMainWindow):
             view = self.current_webview()
         if view:
             view.setUrl(url)
+            self._save_session_tabs()
+
+    def reopen_last_closed_tab(self):
+        while self._closed_tabs_stack:
+            url = self._closed_tabs_stack.pop()
+            if not url.isValid() or url.isEmpty():
+                continue
+            self.add_tab(url=url)
+            return
+
+    def _session_urls(self) -> list[str]:
+        urls: list[str] = []
+        for idx in range(self.tabs.count()):
+            container = self.tabs.widget(idx)
+            view = getattr(container, "webview", None)
+            if view is None:
+                continue
+            url = view.url()
+            if not url.isValid() or url.isEmpty():
+                continue
+            if url.scheme() in ("about", "horaizan"):
+                continue
+            urls.append(url.toString())
+        return urls
+
+    def _restore_session_tabs(self) -> bool:
+        session_tabs = self.settings.session_tabs()
+        if not session_tabs:
+            return False
+
+        restored = 0
+        for tab_url in session_tabs:
+            url = QUrl.fromUserInput(tab_url)
+            if not url.isValid() or url.isEmpty():
+                continue
+            self.add_tab(url=url)
+            restored += 1
+        return restored > 0
+
+    def _save_session_tabs(self):
+        if self.incognito:
+            return
+        self.settings.set_session_tabs(self._session_urls())
 
     def open_incognito_window(self):
         window = BrowserWindow(incognito=True)
@@ -409,6 +472,10 @@ class BrowserWindow(QMainWindow):
         self.profile.clearHttpCache()
         self.profile.cookieStore().deleteAllCookies()
 
+    def closeEvent(self, event: QCloseEvent):
+        self._save_session_tabs()
+        super().closeEvent(event)
+
     def set_shortcut(self, action: str, sequence: str) -> bool:
         if action not in self.settings.DEFAULT_SHORTCUTS:
             return False
@@ -429,6 +496,7 @@ class BrowserWindow(QMainWindow):
 
         actions = {
             "new_tab": self.add_tab,
+            "reopen_closed_tab": self.reopen_last_closed_tab,
             "open_incognito": self.open_incognito_window,
             "close_tab": self.close_current_tab,
             "reload": self.reload_current_page,

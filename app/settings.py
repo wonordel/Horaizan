@@ -11,6 +11,7 @@ class Settings:
     DEFAULT_CONFIRM_CLEAR_DATA = True
     DEFAULT_SHORTCUTS = {
         "new_tab": "Ctrl+T",
+        "reopen_closed_tab": "Ctrl+Shift+T",
         "open_incognito": "Ctrl+Shift+N",
         "close_tab": "Ctrl+W",
         "reload": "Ctrl+R",
@@ -146,6 +147,20 @@ class Settings:
             name,
             self.SEARCH_ENGINE_HOME[self.DEFAULT_SEARCH_ENGINE]
         )
+
+    # ======================
+    # SESSION
+    # ======================
+
+    def session_tabs(self) -> list[str]:
+        raw = self._settings.value("session/tabs", [], type=list)
+        if not raw:
+            return []
+        return [str(value) for value in raw if str(value).strip()]
+
+    def set_session_tabs(self, tabs: list[str]):
+        normalized = [str(tab) for tab in tabs if str(tab).strip()]
+        self._settings.setValue("session/tabs", normalized)
 
     # ======================
     # RESET

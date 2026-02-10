@@ -1,4 +1,4 @@
-from PySide6.QtWebEngineCore import QWebEngineProfile
+from PySide6.QtWebEngineCore import QWebEngineProfile, QWebEngineSettings
 from pathlib import Path
 
 
@@ -8,6 +8,9 @@ def create_profile(incognito: bool = False, parent=None):
         profile.setHttpCacheType(QWebEngineProfile.MemoryHttpCache)
         profile.setPersistentCookiesPolicy(
             QWebEngineProfile.NoPersistentCookies
+        )
+        profile.settings().setAttribute(
+            QWebEngineSettings.WebAttribute.PdfViewerEnabled, True
         )
         return profile
 
@@ -19,6 +22,9 @@ def create_profile(incognito: bool = False, parent=None):
     profile.setCachePath(str(data_path / "cache"))
     profile.setPersistentCookiesPolicy(
         QWebEngineProfile.ForcePersistentCookies
+    )
+    profile.settings().setAttribute(
+        QWebEngineSettings.WebAttribute.PdfViewerEnabled, True
     )
 
     return profile
