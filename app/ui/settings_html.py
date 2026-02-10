@@ -370,6 +370,26 @@ button.danger {
 
             <div class="row">
                 <div>
+                    <div class="label">История браузера</div>
+                    <div class="help">Список посещённых страниц с возможностью открыть запись.</div>
+                </div>
+                <div class="controls">
+                    <button onclick="openHistory()">Открыть историю</button>
+                </div>
+            </div>
+
+            <div class="row">
+                <div>
+                    <div class="label">Управление cookies</div>
+                    <div class="help">Просмотр и удаление cookie-файлов по доменам.</div>
+                </div>
+                <div class="controls">
+                    <button onclick="openCookies()">Открыть cookies</button>
+                </div>
+            </div>
+
+            <div class="row">
+                <div>
                     <div class="label">Сброс настроек</div>
                     <div class="help">Вернуть все настройки (включая горячие клавиши) к значениям по умолчанию.</div>
                 </div>
@@ -473,6 +493,28 @@ button.danger {
 
             <div class="row">
                 <div>
+                    <div class="label">История браузера</div>
+                    <div class="help">Действие: открыть окно истории.</div>
+                </div>
+                <div class="controls">
+                    <input id="shortcut-open_history" class="shortcut" type="text" value="" onkeydown="captureShortcut(event, this)">
+                    <button onclick="saveShortcut('open_history')">Сохранить</button>
+                </div>
+            </div>
+
+            <div class="row">
+                <div>
+                    <div class="label">Управление cookies</div>
+                    <div class="help">Действие: открыть окно cookie-файлов.</div>
+                </div>
+                <div class="controls">
+                    <input id="shortcut-open_cookies" class="shortcut" type="text" value="" onkeydown="captureShortcut(event, this)">
+                    <button onclick="saveShortcut('open_cookies')">Сохранить</button>
+                </div>
+            </div>
+
+            <div class="row">
+                <div>
                     <div class="label">Назад</div>
                     <div class="help">Действие: перейти назад по истории.</div>
                 </div>
@@ -513,6 +555,8 @@ const shortcutActions = [
     'open_settings',
     'toggle_devtools',
     'open_downloads',
+    'open_history',
+    'open_cookies',
     'back',
     'forward',
 ];
@@ -638,6 +682,18 @@ function openDownloads() {
     if (!bridge) return;
     bridge.openDownloads();
     toast('Менеджер загрузок открыт');
+}
+
+function openHistory() {
+    if (!bridge) return;
+    bridge.openHistory();
+    toast('История открыта');
+}
+
+function openCookies() {
+    if (!bridge) return;
+    bridge.openCookies();
+    toast('Управление cookies открыто');
 }
 
 function captureShortcut(event, input) {

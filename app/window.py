@@ -7,7 +7,9 @@ from PySide6.QtWidgets import QMainWindow, QTabWidget, QWidget, QVBoxLayout, QTo
 from PySide6.QtWebEngineCore import QWebEnginePage
 from PySide6.QtWebEngineWidgets import QWebEngineView
 
+from app.cookies import CookieManagerDialog
 from app.downloads import DownloadManagerDialog
+from app.history import HistoryManagerDialog
 from app.profile import create_profile
 from app.settings import Settings
 from app.ui.toolbar import BrowserToolbar
@@ -74,6 +76,10 @@ class BrowserWindow(QMainWindow):
         self._shortcuts: dict[str, QShortcut] = {}
         self._devtools_windows: dict[WebView, QMainWindow] = {}
         self.download_manager = DownloadManagerDialog(self)
+        self.history_manager = HistoryManagerDialog(self)
+        self.cookie_manager = CookieManagerDialog(self.profile.cookieStore(), self)
+
+        self.history_manager.set_open_url_handler(self.open_url_in_current_tab)
 
         self.profile.downloadRequested.connect(self._on_download_requested)
 
@@ -223,6 +229,7 @@ class BrowserWindow(QMainWindow):
         view.titleChanged.connect(lambda text, v=view: self._update_tab_title(v, text))
         view.iconChanged.connect(lambda icon, v=view: self._update_tab_icon(v, icon))
         view.urlChanged.connect(lambda _url, v=view: self._update_tab_title(v))
+        view.loadFinished.connect(lambda ok, v=view: self._record_history_for_view(v, ok))
 
         mode = self.settings.new_tab_mode()
         if mode == "blank":
@@ -260,6 +267,14 @@ class BrowserWindow(QMainWindow):
         toolbar = self.current_toolbar()
         if toolbar:
             toolbar.address_bar.setText("Настройки")
+
+    def open_url_in_current_tab(self, url: QUrl):
+        view = self.current_webview()
+        if not view:
+            self.add_tab()
+            view = self.current_webview()
+        if view:
+            view.setUrl(url)
 
     def open_incognito_window(self):
         window = BrowserWindow(incognito=True)
@@ -346,6 +361,16 @@ class BrowserWindow(QMainWindow):
         self.download_manager.raise_()
         self.download_manager.activateWindow()
 
+    def open_history_manager(self):
+        self.history_manager.show()
+        self.history_manager.raise_()
+        self.history_manager.activateWindow()
+
+    def open_cookie_manager(self):
+        self.cookie_manager.show()
+        self.cookie_manager.raise_()
+        self.cookie_manager.activateWindow()
+
     def _default_download_directory(self) -> str:
         location = QStandardPaths.DownloadLocation
         if hasattr(QStandardPaths, "StandardLocation"):
@@ -369,6 +394,16 @@ class BrowserWindow(QMainWindow):
         request.accept()
         self.download_manager.register_download(request)
         self.open_downloads_manager()
+
+    def _record_history_for_view(self, view, ok: bool):
+        if not ok or self.incognito:
+            return
+        url = view.url()
+        if not url.isValid():
+            return
+        if url.scheme() in ("about", "horaizan"):
+            return
+        self.history_manager.add_entry(view.title() or url.toString(), url.toString())
 
     def clear_browser_data(self):
         self.profile.clearHttpCache()
@@ -401,6 +436,8 @@ class BrowserWindow(QMainWindow):
             "open_settings": self.open_settings,
             "toggle_devtools": self.toggle_devtools_for_current,
             "open_downloads": self.open_downloads_manager,
+            "open_history": self.open_history_manager,
+            "open_cookies": self.open_cookie_manager,
             "back": self.go_back,
             "forward": self.go_forward,
         }

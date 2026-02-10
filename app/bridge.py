@@ -85,6 +85,14 @@ class SettingsBridge(QObject):
     def openDownloads(self):
         self.browser.open_downloads_manager()
 
+    @Slot()
+    def openHistory(self):
+        self.browser.open_history_manager()
+
+    @Slot()
+    def openCookies(self):
+        self.browser.open_cookie_manager()
+
     # ===== RESET =====
     @Slot()
     def resetSettings(self):

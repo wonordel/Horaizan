@@ -18,6 +18,8 @@ class Settings:
         "open_settings": "Ctrl+,",
         "toggle_devtools": "F12",
         "open_downloads": "Ctrl+J",
+        "open_history": "Ctrl+H",
+        "open_cookies": "Ctrl+Shift+J",
         "back": "Alt+Left",
         "forward": "Alt+Right",
     }

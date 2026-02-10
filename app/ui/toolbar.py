@@ -4,7 +4,6 @@ from PySide6.QtWidgets import (
     QToolButton,
     QHBoxLayout,
     QLineEdit,
-    QApplication,
 )
 from PySide6.QtCore import QUrl
 
@@ -56,25 +55,11 @@ class BrowserToolbar(QWidget):
         self.address_bar.setClearButtonEnabled(True)
         self.address_bar.returnPressed.connect(self.load_url)
 
-        self.minimize_btn = QToolButton()
-        self.minimize_btn.setObjectName("WindowButton")
-        self.minimize_btn.setText("—")
-        self.minimize_btn.setToolTip("Свернуть")
-        self.minimize_btn.clicked.connect(self.window().showMinimized)
-
-        self.close_btn = QToolButton()
-        self.close_btn.setObjectName("CloseButton")
-        self.close_btn.setText("✕")
-        self.close_btn.setToolTip("Закрыть")
-        self.close_btn.clicked.connect(QApplication.quit)
-
         layout.addWidget(self.menu_button)
         layout.addWidget(self.back_btn)
         layout.addWidget(self.forward_btn)
         layout.addWidget(self.reload_btn)
         layout.addWidget(self.address_bar, stretch=1)
-        layout.addWidget(self.minimize_btn)
-        layout.addWidget(self.close_btn)
 
         self.webview.urlChanged.connect(self.update_url)
 
