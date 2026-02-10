@@ -115,41 +115,60 @@ AppImage build notes:
 
 ## Project structure
 ```
-.
 ├── app
 │   ├── bridge.py
+│   ├── cookies.py
+│   ├── downloads.py
+│   ├── history.py
 │   ├── __init__.py
+│   ├── __main__.py
 │   ├── main.py
 │   ├── profile.py
 │   ├── __pycache__
-│   │   ├── __init__.cpython-313.pyc
-│   │   ├── main.cpython-313.pyc
-│   │   ├── profile.cpython-313.pyc
-│   │   ├── settings.cpython-313.pyc
-│   │   ├── webview.cpython-313.pyc
-│   │   └── window.cpython-313.pyc
+│   │   ├── bridge.cpython-314.pyc
+│   │   ├── cookies.cpython-314.pyc
+│   │   ├── downloads.cpython-314.pyc
+│   │   ├── history.cpython-314.pyc
+│   │   ├── __init__.cpython-314.pyc
+│   │   ├── __main__.cpython-314.pyc
+│   │   ├── main.cpython-314.pyc
+│   │   ├── profile.cpython-314.pyc
+│   │   ├── settings.cpython-314.pyc
+│   │   ├── webpage.cpython-314.pyc
+│   │   ├── webview.cpython-314.pyc
+│   │   └── window.cpython-314.pyc
 │   ├── settings.py
 │   ├── themes
 │   │   ├── dark.qss
+│   │   ├── icon.png
 │   │   └── light.qss
 │   ├── ui
 │   │   ├── __init__.py
 │   │   ├── menu.py
 │   │   ├── __pycache__
-│   │   │   ├── __init__.cpython-313.pyc
-│   │   │   ├── menu.cpython-313.pyc
-│   │   │   ├── settings_page.cpython-313.pyc
-│   │   │   └── toolbar.cpython-313.pyc
+│   │   │   ├── __init__.cpython-314.pyc
+│   │   │   ├── menu.cpython-314.pyc
+│   │   │   ├── settings_html.cpython-314.pyc
+│   │   │   └── toolbar.cpython-314.pyc
 │   │   ├── settings_html.py
 │   │   └── toolbar.py
 │   ├── webpage.py
 │   ├── webview.py
 │   └── window.py
 ├── build.sh
+├── packaging
+│   └── aur
+│       ├── app-main-argv.patch
+│       ├── horaizan
+│       ├── horaizan.desktop
+│       ├── horaizan.install
+│       ├── PKGBUILD
+│       └── session-and-pdf.patch
 ├── README.en.md
 ├── README.md
-├── requirements.txt
-└── requirements-build.txt
+├── requirements-build.txt
+└── requirements.txt
+
 ```
 
 - **requirements.txt**: Runtime dependencies.
