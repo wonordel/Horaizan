@@ -360,6 +360,16 @@ button.danger {
 
             <div class="row">
                 <div>
+                    <div class="label">Менеджер загрузок</div>
+                    <div class="help">Показывает список активных и завершённых скачиваний.</div>
+                </div>
+                <div class="controls">
+                    <button onclick="openDownloads()">Открыть загрузки</button>
+                </div>
+            </div>
+
+            <div class="row">
+                <div>
                     <div class="label">Сброс настроек</div>
                     <div class="help">Вернуть все настройки (включая горячие клавиши) к значениям по умолчанию.</div>
                 </div>
@@ -441,6 +451,28 @@ button.danger {
 
             <div class="row">
                 <div>
+                    <div class="label">DevTools</div>
+                    <div class="help">Действие: открыть или закрыть инструменты разработчика.</div>
+                </div>
+                <div class="controls">
+                    <input id="shortcut-toggle_devtools" class="shortcut" type="text" value="" onkeydown="captureShortcut(event, this)">
+                    <button onclick="saveShortcut('toggle_devtools')">Сохранить</button>
+                </div>
+            </div>
+
+            <div class="row">
+                <div>
+                    <div class="label">Менеджер загрузок</div>
+                    <div class="help">Действие: открыть окно загрузок браузера.</div>
+                </div>
+                <div class="controls">
+                    <input id="shortcut-open_downloads" class="shortcut" type="text" value="" onkeydown="captureShortcut(event, this)">
+                    <button onclick="saveShortcut('open_downloads')">Сохранить</button>
+                </div>
+            </div>
+
+            <div class="row">
+                <div>
                     <div class="label">Назад</div>
                     <div class="help">Действие: перейти назад по истории.</div>
                 </div>
@@ -479,6 +511,8 @@ const shortcutActions = [
     'reload',
     'focus_address',
     'open_settings',
+    'toggle_devtools',
+    'open_downloads',
     'back',
     'forward',
 ];
@@ -598,6 +632,12 @@ function openIncognito() {
     if (!bridge) return;
     bridge.openIncognitoWindow();
     toast('Окно инкогнито открыто');
+}
+
+function openDownloads() {
+    if (!bridge) return;
+    bridge.openDownloads();
+    toast('Менеджер загрузок открыт');
 }
 
 function captureShortcut(event, input) {

@@ -1,10 +1,13 @@
 from pathlib import Path
 import sys
 
-from PySide6.QtCore import Qt, QUrl, QSize
+from PySide6.QtCore import Qt, QUrl, QSize, QStandardPaths
 from PySide6.QtGui import QKeySequence, QShortcut, QIcon
 from PySide6.QtWidgets import QMainWindow, QTabWidget, QWidget, QVBoxLayout, QToolButton, QApplication
+from PySide6.QtWebEngineCore import QWebEnginePage
+from PySide6.QtWebEngineWidgets import QWebEngineView
 
+from app.downloads import DownloadManagerDialog
 from app.profile import create_profile
 from app.settings import Settings
 from app.ui.toolbar import BrowserToolbar
@@ -69,6 +72,10 @@ class BrowserWindow(QMainWindow):
         self.tabs.setCornerWidget(add, Qt.TopRightCorner)
 
         self._shortcuts: dict[str, QShortcut] = {}
+        self._devtools_windows: dict[WebView, QMainWindow] = {}
+        self.download_manager = DownloadManagerDialog(self)
+
+        self.profile.downloadRequested.connect(self._on_download_requested)
 
         self.add_tab()
         self.set_theme(self.settings.theme())
@@ -228,6 +235,12 @@ class BrowserWindow(QMainWindow):
         if index < 0:
             return
 
+        container = self.tabs.widget(index)
+        if container is not None:
+            webview = getattr(container, "webview", None)
+            if webview:
+                self._close_devtools_for_view(webview)
+
         if self.tabs.count() <= 1:
             self.close()
             return
@@ -281,6 +294,82 @@ class BrowserWindow(QMainWindow):
         toolbar.address_bar.setFocus()
         toolbar.address_bar.selectAll()
 
+    def toggle_devtools_for_current(self):
+        view = self.current_webview()
+        if view:
+            self.toggle_devtools_for_view(view)
+
+    def inspect_element_for_view(self, view):
+        if not view:
+            return
+        self.toggle_devtools_for_view(view)
+        view.page().triggerAction(QWebEnginePage.WebAction.InspectElement)
+
+    def toggle_devtools_for_view(self, view):
+        if not view:
+            return
+
+        existing = self._devtools_windows.get(view)
+        if existing is not None:
+            self._close_devtools_for_view(view)
+            return
+
+        devtools_window = QMainWindow(self)
+        devtools_window.resize(960, 620)
+        devtools_window.setWindowTitle("DevTools - Horaizan")
+
+        devtools_view = QWebEngineView(devtools_window)
+        devtools_window.setCentralWidget(devtools_view)
+
+        view.page().setDevToolsPage(devtools_view.page())
+        devtools_window.show()
+
+        self._devtools_windows[view] = devtools_window
+
+        def _cleanup(_obj=None, current=view):
+            self._close_devtools_for_view(current, silent=True)
+
+        devtools_window.destroyed.connect(_cleanup)
+
+    def _close_devtools_for_view(self, view, silent: bool = False):
+        window = self._devtools_windows.pop(view, None)
+        if view:
+            try:
+                view.page().setDevToolsPage(None)
+            except RuntimeError:
+                pass
+        if window and not silent:
+            window.close()
+
+    def open_downloads_manager(self):
+        self.download_manager.show()
+        self.download_manager.raise_()
+        self.download_manager.activateWindow()
+
+    def _default_download_directory(self) -> str:
+        location = QStandardPaths.DownloadLocation
+        if hasattr(QStandardPaths, "StandardLocation"):
+            location = QStandardPaths.StandardLocation.DownloadLocation
+        directory = QStandardPaths.writableLocation(location)
+        if directory:
+            return directory
+        return str(Path.home() / "Downloads")
+
+    def _on_download_requested(self, request):
+        directory = self._default_download_directory()
+        file_name = request.suggestedFileName() or "download.bin"
+
+        if hasattr(request, "setDownloadDirectory"):
+            request.setDownloadDirectory(directory)
+        if hasattr(request, "setDownloadFileName"):
+            request.setDownloadFileName(file_name)
+        if hasattr(request, "setPath"):
+            request.setPath(str(Path(directory) / file_name))
+
+        request.accept()
+        self.download_manager.register_download(request)
+        self.open_downloads_manager()
+
     def clear_browser_data(self):
         self.profile.clearHttpCache()
         self.profile.cookieStore().deleteAllCookies()
@@ -310,6 +399,8 @@ class BrowserWindow(QMainWindow):
             "reload": self.reload_current_page,
             "focus_address": self.focus_address_bar,
             "open_settings": self.open_settings,
+            "toggle_devtools": self.toggle_devtools_for_current,
+            "open_downloads": self.open_downloads_manager,
             "back": self.go_back,
             "forward": self.go_forward,
         }

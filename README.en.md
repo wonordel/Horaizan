@@ -12,11 +12,13 @@ Horaizan is an open source browser built with PySide6 (Chromium/WebEngine). The 
 - **Tabs with site icon and title**: Displays `favicon`, page title, movable tabs, and close controls.
 - **Built-in settings page**: `horaizan://settings` with sections:
   - General (theme, search engine, new tab behavior)
-  - Privacy (cache/cookies cleanup, confirmation toggle, open incognito)
+  - Privacy (cache/cookies cleanup, confirmation toggle, incognito, download manager)
   - Hotkeys (edit keyboard shortcuts)
 - **Themes**: `dark`, `light`, and `system` (follows OS theme).
 - **Incognito mode**: Separate window with non-persistent cookies/cache (default shortcut `Ctrl+Shift+N`).
-- **Custom hotkeys**: Standard shortcuts are supported (`Ctrl+T`, `Ctrl+W`, `Ctrl+R`, `Ctrl+L`, `Ctrl+,`, `Alt+Left`, `Alt+Right`) and can be changed in settings.
+- **DevTools and context menu**: Developer tools are available from right click ("Inspect element") and via `F12`.
+- **File downloads**: Built-in download flow with a downloads manager and progress tracking.
+- **Custom hotkeys**: Standard shortcuts are supported (`Ctrl+T`, `Ctrl+W`, `Ctrl+R`, `Ctrl+L`, `Ctrl+,`, `F12`, `Ctrl+J`, `Alt+Left`, `Alt+Right`) and can be changed in settings.
 - **App icon support**: Uses `app/themes/icon.png` for windows and builds.
 
 ## Installation

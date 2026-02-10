@@ -81,6 +81,10 @@ class SettingsBridge(QObject):
     def openIncognitoWindow(self):
         self.browser.open_incognito_window()
 
+    @Slot()
+    def openDownloads(self):
+        self.browser.open_downloads_manager()
+
     # ===== RESET =====
     @Slot()
     def resetSettings(self):
