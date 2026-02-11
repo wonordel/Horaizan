@@ -1,3 +1,0 @@
-#!/usr/bin/env bash
-export PYTHONPATH="/usr/lib/horaizan${PYTHONPATH:+:${PYTHONPATH}}"
-exec /usr/bin/python -m app.main "$@"
