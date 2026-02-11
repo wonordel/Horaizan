@@ -1,56 +1,68 @@
 # Maintainer: wonordel <megorka2014@gmail.com>
 
-pkgname=horaizan
-pkgver=v1.0
+pkgname=horaizan-git
+pkgver=release.4.gae91a23
 pkgrel=1
 pkgdesc="Chromium-based browser built with PySide6"
 arch=('x86_64')
 url="https://github.com/wonordel/Horaizan"
 license=('custom')
+
 depends=(
   'python'
   'pyside6'
   'qt6-webengine'
   'hicolor-icon-theme'
 )
+
+makedepends=('git')
+
 optdepends=(
   'xdg-utils: set as default browser via xdg-settings'
 )
-conflicts=('horaizan-git')
-provides=('horaizan-git')
+
+provides=('horaizan')
+conflicts=('horaizan')
+
 install='horaizan.install'
 
-_commit='f82ce6f'
 source=(
-  "${pkgname}-${pkgver}.tar.gz::https://github.com/wonordel/Horaizan/archive/${_commit}.tar.gz"
-  'app-main-argv.patch'
-  'session-and-pdf.patch'
+  "git+https://github.com/wonordel/Horaizan.git"
   'horaizan'
   'horaizan.desktop'
 )
+
 sha256sums=(
   'SKIP'
   'SKIP'
   'SKIP'
-  'SKIP'
-  'SKIP'
 )
 
-prepare() {
-  cd "${srcdir}/Horaizan-${_commit}"
-  patch -Np1 -i "${srcdir}/app-main-argv.patch"
-  patch -Np1 -i "${srcdir}/session-and-pdf.patch"
+options=('!emptydirs')
+
+pkgver() {
+  cd "${srcdir}/Horaizan"
+  git describe --tags --long --always 2>/dev/null | sed 's/^v//;s/-/./g' || echo "0.r$(git rev-list --count HEAD)"
 }
 
 package() {
-  cd "${srcdir}/Horaizan-${_commit}"
+  cd "${srcdir}/Horaizan"
 
   install -dm755 "${pkgdir}/usr/lib/horaizan"
   cp -r app "${pkgdir}/usr/lib/horaizan/"
 
-  install -Dm755 "${srcdir}/horaizan" "${pkgdir}/usr/bin/horaizan"
-  install -Dm644 "${srcdir}/horaizan.desktop" "${pkgdir}/usr/share/applications/horaizan.desktop"
-  install -Dm644 "app/themes/icon.png" "${pkgdir}/usr/share/icons/hicolor/256x256/apps/horaizan.png"
+  install -Dm755 "${srcdir}/horaizan" \
+    "${pkgdir}/usr/bin/horaizan"
 
-  install -Dm644 README.md "${pkgdir}/usr/share/doc/horaizan/README.md"
+  install -Dm644 "${srcdir}/horaizan.desktop" \
+    "${pkgdir}/usr/share/applications/horaizan.desktop"
+
+  install -Dm644 "app/themes/icon.png" \
+    "${pkgdir}/usr/share/icons/hicolor/256x256/apps/horaizan.png"
+
+  install -Dm644 LICENSE \
+    "${pkgdir}/usr/share/licenses/${pkgname}/LICENSE"
+
+  install -Dm644 README.md \
+    "${pkgdir}/usr/share/doc/${pkgname}/README.md"
 }
